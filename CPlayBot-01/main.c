@@ -19,7 +19,7 @@ bool quit = false;
 
 int main(void)
 {
-	int nrobots = 1;
+	int nrobots = 10;
 	Robot *robots[nrobots];
 
 	srand(time(NULL));
@@ -75,38 +75,18 @@ int main(void)
 		{
 			Robot_Draw(renderer, robots[i]);
 		}
-
-		/*			
+			
 		for (int i = 0; i < nrobots; i++)
 		{
 			Robot_Move(robots[i], 16);
 			Robot_Turn(robots[i], (rand() % 3 - 1) * (rand() % 16));
 		}
-*/
-
+			
 		for (int i = 0; i < nrobots; i++)
 		{
 			Robot_Scan(renderer, robots[i], robots, nrobots, 300, 90);
 		}
-
-		int numTouchDevices = SDL_GetNumTouchDevices();
-		for (int i = 0; i < numTouchDevices; i++)
-		{
-			SDL_TouchID touchId = SDL_GetTouchDevice(i);
-			if (touchId)
-			{
-				int numTouchFingers = SDL_GetNumTouchFingers(touchId);
-				for (int j = 0; j < numTouchFingers; j++)
-				{
-					SDL_Finger *finger = SDL_GetTouchFinger(touchId, j);
-					if (finger)
-					{
-						SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-						DrawCircle(renderer, (int)(finger->x * SCREEN_WIDTH), (int)(finger->y * SCREEN_HEIGHT), 32);
-					}
-				}
-			}
-		}
+		
 
 		SDL_SetRenderTarget(renderer, NULL);
 		SDL_RenderCopy(renderer, display, NULL, NULL);
@@ -115,4 +95,3 @@ int main(void)
 
 	return 0;
 }
-

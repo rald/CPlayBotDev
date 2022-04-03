@@ -1,5 +1,5 @@
 #ifndef ROBOT_H
-#define ROBOT_H
+#define ROB0T_H
 
 #include <stdbool.h>
 #include <math.h>
@@ -46,7 +46,7 @@ Robot *Robot_Create(int id, double x, double y, double heading)
 		robot->id = id;
 		robot->x = x;
 		robot->y = y;
-		robot->heading = WrapAngle(heading);
+		robot->heading = ConstrainAngle(heading);
 	}
 	return robot;
 }
@@ -88,13 +88,13 @@ void Robot_Draw(SDL_Renderer *renderer, Robot *robot)
 
 void Robot_Move(Robot *robot, double distance)
 {
-	robot->x = WrapX(distance * cos(robot->heading * DEG2RAD) + robot->x);
-	robot->y = WrapY(distance * sin(robot->heading * DEG2RAD) + robot->y);
+	robot->x = ConstrainX(distance * cos(robot->heading * DEG2RAD) + robot->x);
+	robot->y = ConstrainY(distance * sin(robot->heading * DEG2RAD) + robot->y);
 }
 
 void Robot_Turn(Robot *robot, double angle)
 {
-	robot->heading = WrapAngle(robot->heading + angle);
+	robot->heading = ConstrainAngle(robot->heading + angle);
 }
 
 static bool insector(Robot *r1, Robot *r2, double d, double w)

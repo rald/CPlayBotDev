@@ -12,9 +12,9 @@ double clamp(double d, double min, double max);
 
 double ComputeDistance(double x1, double y1, double x2, double y2);
 
-double WrapX(double x);
-double WrapY(double y);
-double WrapAngle(double a);
+double ConstrainX(double x);
+double ConstrainY(double y);
+double ConstrainAngle(double a);
 
 void DrawLine(SDL_Renderer *renderer, int x1, int y1, int x2, int y2);
 
@@ -40,7 +40,7 @@ double clamp(double d, double min, double max)
 	return t > max ? max : t;
 }
 
-double WrapX(double x)
+double ConstrainX(double x)
 {
 	x = fmod(x, SCREEN_WIDTH);
 	if (x < 0)
@@ -48,7 +48,7 @@ double WrapX(double x)
 	return x;
 }
 
-double WrapY(double y)
+double ConstrainY(double y)
 {
 	y = fmod(y, SCREEN_HEIGHT);
 	if (y < 0)
@@ -56,7 +56,7 @@ double WrapY(double y)
 	return y;
 }
 
-double WrapAngle(double a)
+double ConstrainAngle(double a)
 {
 	a = fmod(a, 360);
 	if (a < 0)
@@ -66,7 +66,7 @@ double WrapAngle(double a)
 
 void DrawPoint(SDL_Renderer *renderer, int x, int y)
 {
-	SDL_RenderDrawPoint(renderer, WrapX(x), WrapY(y));
+	SDL_RenderDrawPoint(renderer, ConstrainX(x), ConstrainY(y));
 }
 
 void DrawLine(SDL_Renderer *renderer, int x1, int y1, int x2, int y2)
