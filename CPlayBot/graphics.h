@@ -3,26 +3,33 @@
 
 #include <SDL2/SDL.h>
 
+#include <stdbool.h>
 #include <math.h>
+
+#define DEG2RAD (M_PI / 180.0)
+#define RAD2DEG (180.0 / M_PI)
 
 #include "common.h"
 
 double sgn(double n);
 double clamp(double d, double min, double max);
 
-double ComputeDistance(double x1, double y1, double x2, double y2);
+bool incircle(double x, double y, double cx, double cy, double cr);
+bool inrect(double x, double y, double rx, double ry, double rw, double rh);
+
+double distance(double x1, double y1, double x2, double y2);
 
 double WrapX(double x);
 double WrapY(double y);
 double WrapAngle(double a);
 
 void DrawLine(SDL_Renderer *renderer, int x1, int y1, int x2, int y2);
-
 void DrawCircle(SDL_Renderer *renderer, int xc, int yc, int r);
+void DrawPoly(SDL_Renderer *renderer,double *pointsx,double *pointsy,int npoints);
 
 #ifdef GRAPHICS_IMPLEMENTATION
 
-double ComputeDistance(double x1, double y1, double x2, double y2)
+double distance(double x1, double y1, double x2, double y2)
 {
 	double dx = x2 - x1;
 	double dy = y2 - y1;
@@ -38,6 +45,18 @@ double clamp(double d, double min, double max)
 {
 	double t = d < min ? min : d;
 	return t > max ? max : t;
+}
+
+bool incirc(double x, double y, double cx, double cy, double cr)
+{
+	double dx = cx - x;
+	double dy = cy - y;
+	return dx * dx + dy * dy < cr * cr;
+}
+
+bool inrect(double x, double y, double rx, double ry, double rw, double rh)
+{
+	return x >= rx && x <= rx + rw && y >= ry && y <= ry + rh;
 }
 
 double WrapX(double x)
@@ -58,10 +77,10 @@ double WrapY(double y)
 
 double WrapAngle(double a)
 {
-	a = fmod(a, 360);
+	a = fmod(a * RAD2DEG, 360);
 	if (a < 0)
 		a += 360;
-	return a;
+	return a * DEG2RAD;
 }
 
 void DrawPoint(SDL_Renderer *renderer, int x, int y)
@@ -149,6 +168,15 @@ void DrawCircle(SDL_Renderer *renderer, int xc, int yc, int r)
 
 		circle(renderer, xc, yc, x, y);
 	}
+}
+
+void DrawPoly(SDL_Renderer *renderer,double *pointsx,double *pointsy,int npoints)
+{
+    for(int i=0;i<npoints-1;i++)
+    {
+        DrawLine(renderer,pointsx[i],pointsy[i],pointsx[i+1],pointsy[i+1]);
+    }
+    DrawLine(renderer,pointsx[npoints-1],pointsy[npoints-1],pointsx[0],pointsy[0]);    
 }
 
 #endif /* GRAPHICS_IMPLEMETATION */
