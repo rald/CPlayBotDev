@@ -22,6 +22,7 @@ bool quit = false;
 int nrobots = ROBOT_MAX;
 Robot *robots[ROBOT_MAX];
 
+
 int main(void)
 {
 
@@ -77,18 +78,12 @@ int main(void)
 		for (int i = 0; i < nrobots; i++)
 		{
 			Robot_Draw(renderer, robots[i]);
-			Robot_Scan(renderer, robots[i], robots, nrobots, 200, 90 * DEG2RAD);
+			Robot_Scan(renderer, robots[i], robots, nrobots, 100, 45 * DEG2RAD);
 		}
 
 		for (int i = 0; i < nrobots; i++)
 		{
 			Robot_Move(robots[i],2);
-
-            if(robots[i]->x<=0) robots[i]->heading=0*DEG2RAD;
-            if(robots[i]->y<=0) robots[i]->heading=90*DEG2RAD;
-            if(robots[i]->x>=SCREEN_WIDTH-1) robots[i]->heading=180*DEG2RAD;
-            if(robots[i]->y>=SCREEN_HEIGHT-1) robots[i]->heading=270*DEG2RAD;
-
 			Robot_Turn(robots[i],(rand()%3-1)*(rand()%8+1)*DEG2RAD);	
         }
 

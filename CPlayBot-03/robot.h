@@ -29,20 +29,22 @@ bool insector(double x, double y, double h, double sx, double sy, double sr, dou
 
 #ifdef ROBOT_IMPLEMENTATION
 
-double f(double n,double s,double e,double a) {	
-	double b=fmod(a-s,n); b=b<0?b+n:b; 
-	return (s<=e)?(b<=e-s):(b<=n-(s-e));
-}
-
-bool insector(double x, double y, double cx, double cy, double h, double r, double w)
+bool insector(double x, double y, double h, double sx, double sy, double sr, double sw)
 {
-	double sa = WrapAngle(h - w / 2);
-	double ea = WrapAngle(h + w / 2);
+	double sa = h - sw / 2;
+	double ea = h + sw / 2;
 
-    double d = distance(cx, cy, x, y);
-    double a = WrapAngle(atan2(y - cy, x - cx));
+	if (sa > ea)
+	{
+		double t = sa;
+		sa = ea;
+		ea = t;
+	}
 
-    return f(360,sa,ea,a) && d<=r;
+	double d = distance(x, y, sx, sy);
+	double a = atan2(sy - y, sx - x);
+
+	return a >= sa && a <= ea && d < sr;
 }
 
 Robot *Robot_Create(int id, double x, double y, double heading, double size)
@@ -99,6 +101,13 @@ void Robot_Scan(SDL_Renderer *renderer, Robot *robot, Robot **robots, int nrobot
 	double sa = robot->heading - w / 2;
 	double ea = robot->heading + w / 2;
 
+	if (sa > ea)
+	{
+		double t = sa;
+		sa = ea;
+		ea = t;
+	}
+
 	double nx1 = r * cos(sa) + robot->x;
 	double ny1 = r * sin(sa) + robot->y;
 	double nx2 = r * cos(ea) + robot->x;
@@ -124,11 +133,12 @@ void Robot_Scan(SDL_Renderer *renderer, Robot *robot, Robot **robots, int nrobot
         }
     }
 
+
  	for (int i = 0; i < nrobots; i++)
 	{
 		if (robot->id != robots[i]->id)
 		{
-			if (insector(robots[i]->x, robots[i]->y, robot->x, robot->y, robot->heading, r, w))
+			if (insector(robot->x, robot->y, robot->heading, robots[i]->x, robots[i]->y, r, w))
 			{
 				SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 				DrawLine(renderer, robot->x, robot->y, robots[i]->x, robots[i]->y);

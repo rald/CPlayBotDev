@@ -61,24 +61,18 @@ bool inrect(double x, double y, double rx, double ry, double rw, double rh)
 
 double WrapX(double x)
 {
-/*
 	x = fmod(x, SCREEN_WIDTH);
 	if (x < 0)
 		x += SCREEN_WIDTH;
 	return x;
-*/
-    return clamp(x,0,SCREEN_WIDTH);
 }
 
 double WrapY(double y)
 {
-/*
 	y = fmod(y, SCREEN_HEIGHT);
 	if (y < 0)
 		y += SCREEN_HEIGHT;
 	return y;
-*/
-    return clamp(y,0,SCREEN_HEIGHT);
 }
 
 double WrapAngle(double a)
@@ -91,9 +85,7 @@ double WrapAngle(double a)
 
 void DrawPoint(SDL_Renderer *renderer, int x, int y)
 {
-    if(x>=0 || x<SCREEN_WIDTH || y>=0 | y<SCREEN_HEIGHT) {
-	    SDL_RenderDrawPoint(renderer, x, y);
-	}
+	SDL_RenderDrawPoint(renderer, WrapX(x), WrapY(y));
 }
 
 void DrawLine(SDL_Renderer *renderer, int x1, int y1, int x2, int y2)
