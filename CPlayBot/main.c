@@ -107,7 +107,7 @@ int main(int argc,char **argv)
         if(start) {
             start=false;
             for (int i = 0; i < nrobots; i++) {
-                robots[i]->start(robots[i]);
+                robots[i]->start(i,robots,nrobots);
             }
         }
 
@@ -118,7 +118,7 @@ int main(int argc,char **argv)
         }
 
         for (int i = 0; i < nrobots; i++) {
-            robots[i]->update(robots[i]);
+            robots[i]->update(i,robots,nrobots);
         }
  
         SDL_SetRenderTarget(renderer, NULL);

@@ -10,8 +10,8 @@
 
 typedef struct Robot Robot;
 
-typedef void fnstart(Robot *robot);
-typedef void fnupdate(Robot *robot);
+typedef void fnstart(int id,Robot *robots[],int nrobots);
+typedef void fnupdate(int id,Robot *robots[],int nrobots);
 
 struct Robot
 {
