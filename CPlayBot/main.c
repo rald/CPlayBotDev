@@ -113,9 +113,10 @@ int main(int argc,char **argv)
 
         for (int i = 0; i < nrobots; i++)
         {
-            Robot_Draw(renderer, robots[i]);
-            Robot_Scan(renderer, robots[i], robots, nrobots, 200, 90 * DEG2RAD);
+            Robot_Scan(renderer, robots[i], robots, nrobots, 200, 90 * DEG2RAD);            Robot_Draw(renderer, robots[i]);
         }
+
+
 
         for (int i = 0; i < nrobots; i++) {
             robots[i]->update(robots[i]->id,robots,nrobots);
