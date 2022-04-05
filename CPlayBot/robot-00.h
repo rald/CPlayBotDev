@@ -10,21 +10,20 @@
 
 typedef struct Robot Robot;
 
-typedef void fnstart(int id,Robot *robots[],int nrobots);
-typedef void fnupdate(int id,Robot *robots[],int nrobots);
+typedef void fnstart(int id, Robot *robots[], int nrobots);
+typedef void fnupdate(int id, Robot *robots[], int nrobots);
 
-struct Robot
-{
+struct Robot {
 	int id;
-    char *name;
+	char *name;
 
 	double x, y;
 	double heading;
-    double size;
+	double size;
 
-    void *handle;
-    fnstart *start;
-    fnupdate *update;
+	void *handle;
+	fnstart *start;
+	fnupdate *update;
 };
 
 void Robot_Move(Robot *robot, double distance);
@@ -38,38 +37,32 @@ static double WrapX(double x);
 static double WrapY(double y);
 static double WrapAngle(double a);
 
-static double clamp(double d, double min, double max)
-{
+static double clamp(double d, double min, double max) {
 	double t = d < min ? min : d;
 	return t > max ? max : t;
 }
 
-static double WrapX(double x)
-{
-    return clamp(x,0,SCREEN_WIDTH);
+static double WrapX(double x) {
+	return clamp(x, 0, SCREEN_WIDTH);
 }
 
-static double WrapY(double y)
-{
-    return clamp(y,0,SCREEN_HEIGHT);
+static double WrapY(double y) {
+	return clamp(y, 0, SCREEN_HEIGHT);
 }
 
-static double WrapAngle(double a)
-{
+static double WrapAngle(double a) {
 	a = fmod(a * RAD2DEG, 360);
 	if (a < 0)
 		a += 360;
 	return a * DEG2RAD;
 }
 
-void Robot_Move(Robot *robot, double distance)
-{
+void Robot_Move(Robot *robot, double distance) {
 	robot->x = WrapX(distance * cos(robot->heading) + robot->x);
 	robot->y = WrapY(distance * sin(robot->heading) + robot->y);
 }
 
-void Robot_Turn(Robot *robot, double angle)
-{
+void Robot_Turn(Robot *robot, double angle) {
 	robot->heading = WrapAngle(robot->heading + angle);
 }
 
