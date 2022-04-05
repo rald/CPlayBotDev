@@ -21,7 +21,7 @@ bool quit = false;
 
 int main(int argc,char **argv)
 {
-    bool start=true;
+    bool start=false;
 
     srand(time(NULL));
 
