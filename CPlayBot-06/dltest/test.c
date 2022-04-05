@@ -42,7 +42,6 @@ int main() {
         }
 
 
-
         printf("Running robot %d:%s\n",i,robotNames[i]);
 
         retval[i] = fstart[i](i,robotNames[i]);

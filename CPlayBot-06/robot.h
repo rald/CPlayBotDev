@@ -11,37 +11,25 @@
 
 typedef struct Robot Robot;
 
-typedef void fnstart(Robot *robot);
-typedef void fnupdate(Robot *robot);
-
 struct Robot
 {
 	int id;
-    char *name;
-
 	double x, y;
 	double heading;
     double size;
-
-    void *handle;
-    fnstart *start;
-    fnupdate *update;
 };
 
-Robot *Robot_Create(int id, char *name, double x, double y, double heading, double size);
+Robot *Robot_Create(int id, double x, double y, double heading, double size);
 void Robot_Destroy(Robot *robot);
 void Robot_Draw(SDL_Renderer *renderer, Robot *robot);
 void Robot_Turn(Robot *robot, double a);
 void Robot_Scan(SDL_Renderer *renderer, Robot *robot, Robot **robots, int nrobots, double d, double w);
 
-bool inangle(double n,double s,double e,double a);
 bool insector(double x, double y, double h, double sx, double sy, double sr, double sw);
-
-
 
 #ifdef ROBOT_IMPLEMENTATION
 
-bool inangle(double n,double s,double e,double a) {	
+double f(double n,double s,double e,double a) {	
 	double b=fmod(a-s,n); b=b<0?b+n:b; 
 	return (s<=e)?(b<=e-s):(b<=n-(s-e));
 }
@@ -54,16 +42,15 @@ bool insector(double x, double y, double cx, double cy, double h, double r, doub
     double d = distance(cx, cy, x, y);
     double a = WrapAngle(atan2(y - cy, x - cx));
 
-    return inangle(360,sa,ea,a) && d<=r;
+    return f(360,sa,ea,a) && d<=r;
 }
 
-Robot *Robot_Create(int id, char *name,double x, double y, double heading, double size)
+Robot *Robot_Create(int id, double x, double y, double heading, double size)
 {
 	Robot *robot = malloc(sizeof(*robot));
 	if (robot)
 	{
 		robot->id = id;
-		robot->name = name;
 		robot->x = WrapX(x);
 		robot->y = WrapY(y);
 		robot->heading = WrapAngle(heading);
@@ -150,12 +137,6 @@ void Robot_Scan(SDL_Renderer *renderer, Robot *robot, Robot **robots, int nrobot
 	}
 }
 
-
-
 #endif /* ROBOT_IMPLEMENTATION */
 
-
-
 #endif /* ROBOT_H */
-
-
